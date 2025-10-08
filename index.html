@@ -22,10 +22,10 @@
     <form id="calcForm" class="card" novalidate>
       <div class="inputs-grid">
         <div class="field">
-          <label for="input1">Input 1</label>
+          <label for="input1">Total width</label>
           <input
             type="number"
-            id="input1"
+            id="inputTotWid"
             name="input1"
             step="any"
             inputmode="decimal"
@@ -33,10 +33,10 @@
           />
         </div>
         <div class="field">
-          <label for="input2">Input 2</label>
+          <label for="input2">Profile width</label>
           <input
             type="number"
-            id="input2"
+            id="inputProWid"
             name="input2"
             step="any"
             inputmode="decimal"
@@ -44,10 +44,10 @@
           />
         </div>
         <div class="field">
-          <label for="input3">Input 3</label>
+          <label for="input3">Desired Spacing </label>
           <input
             type="number"
-            id="input3"
+            id="inputDesSpa"
             name="input3"
             step="any"
             inputmode="decimal"
@@ -64,17 +64,17 @@
 
     <section class="card results" aria-live="polite" aria-atomic="true">
       <div class="result">
-        <div class="result-label">Result 1 (Sum)</div>
-        <div id="result1" class="result-value">-</div>
+        <div class="result-label">Calculated Spacing</div>
+        <div id="calcSpa" class="result-value">-</div>
       </div>
       <div class="result">
-        <div class="result-label">Result 2 (a × b − c)</div>
-        <div id="result2" class="result-value">-</div>
+        <div class="result-label">Number of profiles</div>
+        <div id="nPro" class="result-value">-</div>
       </div>
     </section>
 
     <footer class="app-footer">
-      <small>Tip: Press <kbd>Enter</kbd> to calculate</small>
+      <small>Press <kbd>Enter</kbd> to calculate</small>
     </footer>
   </main>
 
