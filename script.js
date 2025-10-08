@@ -2,12 +2,12 @@
   const form = document.getElementById('calcForm');
   const resetBtn = document.getElementById('resetBtn');
 
-  const input1 = document.getElementById('input1');
-  const input2 = document.getElementById('input2');
-  const input3 = document.getElementById('input3');
+  const inputTotWid = document.getElementById('inputTotWid');
+  const inputProWid = document.getElementById('inputProWid');
+  const inputDesSpa = document.getElementById('inputDesSpa');
 
-  const result1El = document.getElementById('result1');
-  const result2El = document.getElementById('result2');
+  const result1El = document.getElementById('calcSpa');
+  const result2El = document.getElementById('nPro');
 
   function toNumber(val) {
     const num = parseFloat(val);
@@ -20,24 +20,24 @@
   }
 
   function calculate() {
-    const a = toNumber(input1.value);
-    const b = toNumber(input2.value);
-    const c = toNumber(input3.value);
+    const a = toNumber(inputTotWid.value);
+    const b = toNumber(inputProWid.value);
+    const c = toNumber(inputDesSpa.value);
 
-    const sum = a + b + c;       // Result 1: Sum
-    const formula = a * b - c;   // Result 2: (a * b) - c
+    const num = round((a - b)/(b + c))  + 1;    // calculate number of profiles
+    const calcSpa = ((a - b)/(num-1)) - b ;   // spacing between profiles
 
-    result1El.textContent = format(sum);
-    result2El.textContent = format(formula);
+    result1El.textContent = format(calcSpa);
+    result2El.textContent = format(num);
   }
 
   function resetAll() {
-    input1.value = '';
-    input2.value = '';
-    input3.value = '';
+    inputTotWid.value = '';
+    inputProWid.value = '';
+    inputDesSpa.value = '';
     result1El.textContent = '-';
     result2El.textContent = '-';
-    input1.focus();
+    inputTotWid.focus();
   }
 
   // Submit calculates (also works with Enter key)
@@ -50,7 +50,7 @@
   resetBtn.addEventListener('click', resetAll);
 
   // Optional: Auto-calc on input changes (uncomment to enable)
-  // [input1, input2, input3].forEach(inp =>
-  //   inp.addEventListener('input', calculate)
-  // );
+   [inputTotWid, inputProWid, inputDesSpa].forEach(inp =>
+     inp.addEventListener('input', calculate)
+  );
 })();
