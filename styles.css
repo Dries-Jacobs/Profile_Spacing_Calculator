@@ -35,7 +35,7 @@
   :root {
     --bg: #f6f7fb;
     --bg-gradient: radial-gradient(1200px 800px at 10% -10%, #ff4f4f10, transparent),
-                    radial-gradient(1000px 700px at 110% 10%, #00bcd422, transparent),
+                    radial-gradient(1000px 700px at 110% 10%, #d47f0022, transparent),
                     linear-gradient(180deg, #fbf9f6, #fbfaf6);
     --surface: #ffffff;
     --surface-2: #f7f8fc;
