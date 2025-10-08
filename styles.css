@@ -13,7 +13,7 @@
   --surface: #121931;
   --surface-2: #0e142a;
   --text: #e9edff;
-  --text-subtle: #a8a094;
+  --text-subtle: #a8b0d3;
   --primary: #ffb34f;
   --primary-600: #f2a43d;
   --primary-700: #de972c;
@@ -65,7 +65,8 @@ body {
 
 /* ========== App Layout ========== */
 .app {
-  width: min(860px, 96vw);
+  width: 100%; /* allows app to take up the full space between body padding */
+  max-width: 860px; /* keeps the large screen limit */
   display: grid;
   gap: var(--gap-lg);
 }
