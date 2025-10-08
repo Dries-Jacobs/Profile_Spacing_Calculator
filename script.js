@@ -24,7 +24,7 @@
     const b = toNumber(inputProWid.value);
     const c = toNumber(inputDesSpa.value);
 
-    const num = round((a - b)/(b + c))  + 1;    // calculate number of profiles
+    const num = Math.round((a - b)/(b + c))  + 1;    // calculate number of profiles
     const calcSpa = ((a - b)/(num-1)) - b ;   // spacing between profiles
 
     result1El.textContent = format(calcSpa);
