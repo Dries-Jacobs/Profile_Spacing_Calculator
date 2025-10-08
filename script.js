@@ -18,17 +18,21 @@
     // Keep two decimals like your original
     return Number(val).toFixed(2);
   }
+  function format2(val) {
+    // Keep two decimals like your original
+    return Number(val).toFixed(0);
+  }
 
   function calculate() {
     const a = toNumber(inputTotWid.value);
     const b = toNumber(inputProWid.value);
     const c = toNumber(inputDesSpa.value);
 
-    const num = Math.round((a - b)/(b + c))  + 1;    // calculate number of profiles
-    const calcSpa = (a - (num * b)) / (num - 1);   // spacing between profiles
+    const num = ((a - b)/(b + c))  + 1;    // calculate number of profiles
+    const calcSpa = ((a - b)/(num-1)) - b ;   // spacing between profiles
 
-    result1El.textContent = format(calcSpa);
-    result2El.textContent = format(num);
+    result1El.textContent = format(calcSpa)  + ' mm';
+    result2El.textContent = format2(num);
   }
 
   function resetAll() {
