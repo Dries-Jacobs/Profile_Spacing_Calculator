@@ -1,44 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Calculator App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40 margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <title>Quick Calculator</title>
+  styles.css
 </head>
 <body>
-    <h1>Quick Calculator</h1>
-    <div>
-        <input type="number" id="input1" placeholder="Input 1">
-        <input type="number" id="input2" placeholder="Input 2">
-        <input type="number" id="input3" placeholder="Input 3">
-    </div>
-    <button onclick="calculate()">Calculate</button>
-    <div class="output">
-        <p>Result 1: <span id="result1">-</span></p>
-        <p>Result 2: <span id="result2">-</span></p>
-    </div>
+  <main class="app" role="main">
+    <header class="app-header">
+      <h1 class="app-title">🧮 Quick Calculator</h1>
+      <p class="app-subtitle">Enter values and get instant results</p>
+    </header>
 
-    <script>
-        function calculate() {
-            const a = parseFloat(document.getElementById('input1').value) || 0;
-            const b = parseFloat(document.getElementById('input2').value) || 0;
-            const c = parseFloat(document.getElementById('input3').value) || 0;
+    <form id="calcForm" class="card" novalidate>
+      <div class="inputs-grid">
+        <div class="field">
+          <label for="input1">Input 1</label>
+          <input
+            type="number"
+            id="input1"
+            name="input1"
+            step="any"
+            inputmode="decimal"
+            placeholder="e.g., 12.5"
+          />
+        </div>
+        <div class="field">
+          <label for="input2">Input 2</label>
+          <input
+            type="number"
+            id="input2"
+            name="input2"
+            step="any"
+            inputmode="decimal"
+            placeholder="e.g., 3"
+          />
+        </div>
+        <div class="field">
+          <label for="input3">Input 3</label>
+          <input
+            type="number"
+            id="input3"
+            name="input3"
+            step="any"
+            inputmode="decimal"
+            placeholder="e.g., 1.2"
+          />
+        </div>
+      </div>
 
-            // Example calculations:
-            const result1 = a + b + c;       // Sum
-            const result2 = (a * b) - c;     // Some formula
+      <div class="actions">
+        <button type="submit" class="btn primary">Calculate</button>
+        <button type="button" id="resetBtn" class="btn ghost">Reset</button>
+      </div>
+    </form>
 
-            document.getElementById('result1').textContent = result1.toFixed(2);
-            document.getElementById('result2').textContent = result2.toFixed(2);
-        }
-    </script>
+    <section class="card results" aria-live="polite" aria-atomic="true">
+      <div class="result">
+        <div class="result-label">Result 1 (Sum)</div>
+        <div id="result1" class="result-value">-</div>
+      </div>
+      <div class="result">
+        <div class="result-label">Result 2 (a × b − c)</div>
+        <div id="result2" class="result-value">-</div>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      <small>Tip: Press <kbd>Enter</kbd> to calculate</small>
+    </footer>
+  </main>
+
+  script.js</script>
 </body>
 </html>
