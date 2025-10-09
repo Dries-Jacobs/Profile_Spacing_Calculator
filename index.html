@@ -14,6 +14,140 @@
         <p class="app-subtitle">Profile Spacing Calculator</p>
       </header>
 
+      
+<!-- Help button (top-right) -->
+<button
+  id="helpButton"
+  class="help-button"
+  aria-haspopup="dialog"
+  aria-expanded="false"
+  aria-controls="helpOverlay"
+  title="Help"
+>
+  <!-- White question mark, no circle -->
+  <span class="help-icon" aria-hidden="true">?</span>
+  <span class="sr-only">Open help</span>
+</button>
+
+
+<!-- Overlay -->
+<div
+  id="helpOverlay"
+  class="help-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="helpTitle"
+  aria-describedby="helpBody"
+>
+  <!-- Close (top-right inside overlay) -->
+  <button type="button" class="help-overlay__close" aria-label="Close help">×</button>
+
+  <!-- Content (transparent; no white box) -->
+  <div class="help-overlay__panel" role="document">
+    <h2 id="helpTitle">Need help?</h2>
+    <p id="helpBody">
+      <svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 420 140"
+  width="420"
+  height="140"
+  role="img"
+  aria-label="Three squares, ellipsis replacing a missing square, and a final square with a dimension line showing the total distance from the first to the last square."
+>
+  <desc>
+    The graphic shows three squares, then three dots where a square would be, followed by a last square.
+    A dimension line with arrows points from the first square's left edge to the last square's right edge.
+  </desc>
+
+  <!--
+    Layout math (for reference):
+    - Square size (s) = 40
+    - Gap between squares (g) = 28
+    - First square x0 = 40, y0 = 50
+    - Squares at x: 40, 108, 176, (missing at 244), last at 312
+    - Last square right edge = 312 + 40 = 352
+    - Dimension line at y = 30
+  -->
+
+  <defs>
+    <!-- Arrowhead for dimension line -->
+    <marker id="arrow" viewBox="0 0 8 8" refX="8" refY="4"
+            markerWidth="5" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="currentColor"/>
+    </marker>
+
+    <style>
+      .sq {
+        fill: none;                 /* hollow squares */
+        stroke: currentColor;       /* inherits from parent color */
+        stroke-width: 2;
+        vector-effect: non-scaling-stroke;
+      }
+      .dots {
+        fill: currentColor;         /* solid dots for ellipsis */
+      }
+      .dim-line, .ext {
+        stroke: currentColor;
+        stroke-width: 2;
+        vector-effect: non-scaling-stroke;
+      }
+      .ext {
+        stroke-width: 1.5;
+        stroke-dasharray: 3 3;      /* extension lines */
+      }
+      .label {
+        fill: currentColor;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        text-anchor: middle;
+      }
+    </style>
+  </defs>
+
+  <!-- Squares -->
+  <rect class="sq" x="40"  y="50" width="40" height="40" rx="2" ry="2"/>
+  <rect class="sq" x="108" y="50" width="40" height="40" rx="2" ry="2"/>
+  <rect class="sq" x="176" y="50" width="40" height="40" rx="2" ry="2"/>
+
+  <!-- Ellipsis replacing the 4th square (centered where it would be) -->
+  <!-- Missing square region would be x = 244..284; center at 264 -->
+  <g class="dots">
+    <circle cx="254" cy="53" r="3"/>
+    <circle cx="264" cy="53" r="3"/>
+    <circle cx="274" cy="53" r="3"/>
+  </g>
+
+  <!-- Last square -->
+  <rect class="sq" x="312" y="50" width="40" height="40" rx="2" ry="2"/>
+
+  <!-- Dimension: total distance from first square's LEFT edge to last square's RIGHT edge -->
+  <!-- Extension lines (from the geometry) -->
+  <line class="ext" x1="40"  y1="50" x2="40"  y2="30"/>
+  <line class="ext" x1="352" y1="50" x2="352" y2="30"/>
+
+  <!-- Main dimension line with arrowheads -->
+  <line class="dim-line"
+        x1="40" y1="30"
+        x2="352" y2="30"
+        marker-start="url(#arrow)"
+        marker-end="url(#arrow)"/>
+
+  <!-- Optional label (remove if you want just arrows) -->
+  <text class="label" x="196" y="18">Total width</text>
+
+    </p>
+    <ul>
+      <li>1: Enter total width (outside of first and last profile)</li>
+      <li>2: Enter width of the profile</li>
+      <li>3: Enter the desired spacing</li>
+      <li>4: Use calculate button to temporary save the calculation</li>
+      <p>close with <kbd>Esc</kbd> or by clicking outside.</p>
+    </ul>
+  </div>
+</div>
+
       <section class="card">
         <form id="calcForm">
           <div class="inputs-grid">
@@ -80,5 +214,69 @@
       </div>
     </aside>
      <script src="script.js"></script>
+     <script>
+(() => {
+  const helpBtn = document.getElementById('helpButton');
+  const overlay = document.getElementById('helpOverlay');
+  const closeBtn = overlay.querySelector('.help-overlay__close');
+  let lastActive = null;
+
+  function lockScroll(lock) {
+    document.documentElement.style.overflow = lock ? 'hidden' : '';
+    document.body.style.overflow = lock ? 'hidden' : '';
+  }
+
+  function openOverlay() {
+    lastActive = document.activeElement;
+    overlay.setAttribute('aria-hidden', 'false');
+    helpBtn.setAttribute('aria-expanded', 'true');
+    lockScroll(true);
+    // Focus close first to keep keyboard users inside the dialog
+    closeBtn?.focus({ preventScroll: true });
+  }
+
+  function closeOverlay() {
+    overlay.setAttribute('aria-hidden', 'true');
+    helpBtn.setAttribute('aria-expanded', 'false');
+    lockScroll(false);
+    // return focus to the opener
+    lastActive?.focus?.({ preventScroll: true });
+  }
+
+  // Click handlers
+  helpBtn.addEventListener('click', openOverlay);
+  closeBtn.addEventListener('click', closeOverlay);
+
+  // Click outside panel to close
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeOverlay();
+  });
+
+  // Keyboard: Escape to close; trap Tab within overlay
+  window.addEventListener('keydown', (e) => {
+    if (overlay.getAttribute('aria-hidden') === 'false') {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeOverlay();
+      } else if (e.key === 'Tab') {
+        const focusables = overlay.querySelectorAll(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        );
+        const list = Array.from(focusables).filter(el => el.offsetParent !== null);
+        if (list.length) {
+          const first = list[0];
+          const last = list[list.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            last.focus(); e.preventDefault();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            first.focus(); e.preventDefault();
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+
   </body>
 </html>
