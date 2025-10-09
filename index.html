@@ -1,83 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  />
-  <title>Spacing Calculator</title>
-  
-<!-- Link to CSS -->
-  <link rel="stylesheet" href="styles.css""app">
+  <head>
+    <meta charset="utf-8" />
+    <title>Spacing Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css""app">
+    
+  </head>
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <h1 class="app-title">Spacing Calculator</h1>
+        <p class="app-subtitle">Profile Spacing Calculator</p>
+      </header>
 
-</head>
-<body>
-  <main class="app" role="main">
-    <header class="app-header">
-      <h1 class="app-title">Profile Spacing Calculator</h1>
-      <p class="app-subtitle">Enter values and get instant results</p>
-    </header>
+      <section class="card">
+        <form id="calcForm">
+          <div class="inputs-grid">
+            <div class="field">
+              <label for="inputTotWid">Total width (mm)</label>
+              <input id="inputTotWid" type="number" inputmode="decimal" placeholder="e.g. 2400" />
+            </div>
+            <div class="field">
+              <label for="inputProWid">Profile width (mm)</label>
+              <input id="inputProWid" type="number" inputmode="decimal" placeholder="e.g. 90" />
+            </div>
+            <div class="field">
+              <label for="inputDesSpa">Desired Spacing (mm)</label>
+              <input id="inputDesSpa" type="number" inputmode="decimal" placeholder="e.g. 30" />
+            </div>
+          </div>
 
-    <form id="calcForm" class="card" novalidate>
-      <div class="inputs-grid">
-        <div class="field">
-          <label for="input1">Total width (mm)</label>
-          <input
-            type="number"
-            id="inputTotWid"
-            name="input1"
-            step="any"
-            inputmode="decimal"
-            placeholder="bv. 8659"
-          />
+          <div class="actions">
+            <button class="btn primary" type="submit">Calculate</button>
+            <button class="btn ghost" type="button" id="resetBtn">Reset</button>
+          </div>
+
+          <div class="results" aria-live="polite">
+            <div class="result">
+              <div class="result-label">Calculated Spacing</div>
+              <div class="result-value" id="calcSpa">-</div>
+            </div>
+            <div class="result">
+              <div class="result-label">Number of profiles</div>
+              <div class="result-value" id="nPro">-</div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <footer class="app-footer">
+        <p><kbd>Enter</kbd> to calculate</p>
+      </footer>
+    </main>
+
+    <!-- Scrim (backdrop) for the drawer -->
+    <div class="scrim" id="drawerScrim" aria-hidden="true"></div>
+
+    <!-- Bottom Drawer (History) -->
+    <aside
+      class="drawer"
+      id="historyDrawer"
+      aria-hidden="true"
+      aria-labelledby="drawerTitle"
+      role="dialog"
+    >
+      <header class="drawer-header" id="drawerHandle" role="button" aria-label="Drag or swipe to open/close">
+        <div class="drawer-grip" aria-hidden="true"></div>
+        <h2 class="drawer-title" id="drawerTitle">History</h2>
+        <div class="drawer-actions">
+          <button class="btn ghost small" type="button" id="clearHistoryBtn">Clear</button>
         </div>
-        <div class="field">
-          <label for="input2">Profile width (mm)</label>
-          <input
-            type="number"
-            id="inputProWid"
-            name="input2"
-            step="any"
-            inputmode="decimal"
-            placeholder="bv. 40"
-          />
-        </div>
-        <div class="field">
-          <label for="input3">Desired Spacing (mm)</label>
-          <input
-            type="number"
-            id="inputDesSpa"
-            name="input3"
-            step="any"
-            inputmode="decimal"
-            placeholder="bv. 30"
-          />
-        </div>
-      </div>
+      </header>
 
-      <div class="actions">
-        <button type="submit" class="btn primary">Calculate</button>
-        <button type="button" id="resetBtn" class="btn ghost">Reset</button>
+      <div class="drawer-content" role="region" aria-label="Previous calculations">
+        <ul id="historyList" class="history-list">
+          <!-- Items are rendered by script.js -->
+        </ul>
       </div>
-    </form>
-
-    <section class="card results" aria-live="polite" aria-atomic="true">
-      <div class="result">
-        <div class="result-label">Calculated Spacing</div>
-        <div id="calcSpa" class="result-value">-</div>
-      </div>
-      <div class="result">
-        <div class="result-label">Number of profiles</div>
-        <div id="nPro" class="result-value">-</div>
-      </div>
-    </section>
-
-    <footer class="app-footer">
-      <small>Press <kbd>Enter</kbd> to calculate</small>
-    </footer>
-  </main>
-
-  <script src="script.js"></script>
-</body>
+    </aside>
+     <script src="script.js"></script>
+  </body>
 </html>

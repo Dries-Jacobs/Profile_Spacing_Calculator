@@ -222,3 +222,139 @@ kbd {
   padding: 0 6px;
   font: 600 0.82rem var(--mono);
 }
+/* ========== Bottom Drawer (History) ========== */
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  z-index: 40;
+}
+.scrim.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer {
+  --peek-height: 68px;      /* collapsed height visible when closed */
+  --drawer-max-h: 70vh;     /* max height of the drawer */
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: min(var(--drawer-max-h), 560px);
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border-top: 1px solid var(--border);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 50;
+
+  /* Start collapsed (before JS adjusts exact px) */
+  transform: translateY(calc(100% - var(--peek-height)));
+  transition: transform 280ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+  touch-action: none; /* helps with consistent pointer events */
+}
+
+.drawer.dragging {
+  transition: none; /* no animation while dragging */
+}
+
+.drawer-header {
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 10px var(--pad);
+  background: color-mix(in srgb, var(--surface-2) 92%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--border), #000 6%);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  cursor: ns-resize; /* indicates draggable area */
+}
+
+.drawer-grip {
+  justify-self: center;
+  width: 44px;
+  height: 5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-subtle), transparent 40%);
+}
+
+.drawer-title {
+  grid-column: 2 / 3;
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.drawer-actions {
+  grid-column: 3 / 4;
+  display: flex;
+  justify-content: end;
+}
+.btn.small {
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+.drawer-content {
+  padding: 8px var(--pad);
+  max-height: calc(100% - 54px); /* header height ~54px */
+  overflow: auto;
+}
+
+.history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.history-item {
+  background: color-mix(in srgb, var(--surface-2) 94%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.history-item .row1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--text-subtle);
+  margin-bottom: 4px;
+}
+.history-item .row1 .tag {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-weight: 600;
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface), transparent 35%);
+}
+
+.history-item .row2 {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+}
+.history-item .row2 strong {
+  font-weight: 800;
+}
+
+.history-list .empty {
+  text-align: center;
+  color: var(--text-subtle);
+  padding: 14px 0;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+}
