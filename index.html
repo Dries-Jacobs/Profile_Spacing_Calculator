@@ -7,7 +7,32 @@
     <link rel="stylesheet" href="styles.css""app">
     
   </head>
- 
+ <!-- Sentry Browser SDK with tracing & replay -->
+<script
+  src="https://browser.sentry-cdn.com/7.120.0/bundle.tracing.replay.min.js"
+  integrity="sha384-xb3kE9z1EXAMPLEHASHONLY-DO-NOT-COPY-THIS"
+ R_PUBLIC_KEY@oYOUR_ORG_ID.ingest.sentry.io/YOUR_PROJECT_ID",
+    integrations: [
+      new Sentry.BrowserTracing({
+        // Include your own API hosts here to trace XHR/fetch
+        tracePropagationTargets: [/^https?:\/\/localhost(:\d+)?\//, /^\//]
+      }),
+      new Sentry.Replay(), // remove if you don't want session replay
+    ],
+
+    // Sampling — set low values in production; for testing keep them high
+    tracesSampleRate: 1.0,
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+
+    // Turn on verbose SDK logs in the console while debugging
+    debug: true
+  });
+
+  // Quick manual test: send a test event on load
+  Sentry.captureMessage("Sentry wired up on index.html ✅", "info");
+</script>
+
   <body>
      <script
   src="https://js-de.sentry-cdn.com/d69711f442629cabf26f3cd5569831b4.min.js"
@@ -31,6 +56,10 @@
   <!-- White question mark, no circle -->
   <span class="help-icon" aria-hidden="true">?</span>
   <span class="sr-only">Open help</span>
+</button>
+
+<button onclick="throw new Error('Manual test error from button')">
+  Throw test error
 </button>
 
 
@@ -280,7 +309,7 @@
     }
   });
 })();
-       myUndefinedFunction();
+myUndefinedFunction();
 </script>
 
   </body>
