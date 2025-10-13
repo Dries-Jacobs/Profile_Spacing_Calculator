@@ -181,15 +181,15 @@
           <div class="inputs-grid">
             <div class="field">
               <label for="inputTotWid">Total width (mm)</label>
-              <input id="inputTotWid" type="number" inputmode="decimal" placeholder="e.g. 2400" />
+              <input id="inputTotWid" name="inputTotWid" type="number" inputmode="decimal" placeholder="e.g. 2400" />
             </div>
             <div class="field">
               <label for="inputProWid">Profile width (mm)</label>
-              <input id="inputProWid" type="number" inputmode="decimal" placeholder="e.g. 90" />
+              <input id="inputProWid" name="inputProWid" type="number" inputmode="decimal" placeholder="e.g. 90" />
             </div>
             <div class="field">
               <label for="inputDesSpa">Desired Spacing (mm)</label>
-              <input id="inputDesSpa" type="number" inputmode="decimal" placeholder="e.g. 30" />
+              <input id="inputDesSpa" name="inputDesSpa" type="number" inputmode="decimal" placeholder="e.g. 30" />
             </div>
           </div>
 
@@ -304,6 +304,99 @@
     }
   });
 })();
+</script>
+<script>
+  // --- Helpers -------------------------------------------------------------
+
+  // Read and normalize your form values.
+  function getCalcFormData() {
+    const tot = document.getElementById('inputTotWid')?.value ?? '';
+    const pro = document.getElementById('inputProWid')?.value ?? '';
+    const des = document.getElementById('inputDesSpa')?.value ?? '';
+
+    // Convert to numbers when possible; otherwise keep as empty string/null.
+    const toNum = (v) => (v === '' ? null : Number(v));
+    return {
+      totalWidth_mm: toNum(tot),
+      profileWidth_mm: toNum(pro),
+      desiredSpacing_mm: toNum(des),
+      // Optional: a quick validity flag you might find useful in Sentry
+      valid:
+        (tot !== '' && !Number.isNaN(Number(tot))) &&
+        (pro !== '' && !Number.isNaN(Number(pro))) &&
+        (des !== '' && !Number.isNaN(Number(des))),
+    };
+  }
+
+  // Add a breadcrumb so the event timeline shows the user action.
+  function breadcrumbFormSubmit(data) {
+    Sentry.addBreadcrumb({
+      category: 'ui.form',
+      type: 'user',
+      level: 'info',
+      message: 'Spacing calculator submitted',
+      data
+    });
+  }
+
+  // --- Wire up submit ------------------------------------------------------
+
+  (function wireSentryFormLogging() {
+    const form = document.getElementById('calcForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+      // If your form *should not* reload the page (common for calculators),
+      // keep preventDefault. If you *do* want a full reload submission,
+      // remove preventDefault and rely on Sentry’s beacon/flush (see below).
+      e.preventDefault();
+
+      const data = getCalcFormData();
+
+      breadcrumbFormSubmit(data);
+
+      // Optionally keep last submission on the current scope for correlation
+      Sentry.configureScope((scope) => {
+        scope.setContext('lastSubmission', data);
+        scope.setTag('component', 'spacing-calculator');
+      });
+
+      // Send a structured event
+      Sentry.captureEvent({
+        message: 'calcForm submission',
+        level: 'info',
+        tags: { component: 'spacing-calculator' },
+        contexts: { form: data },
+        extra: {
+          fieldCount: 3
+        }
+      });
+
+      // Ensure the event is sent before you continue (prevents loss on navigation)
+      try { await Sentry.flush(600); } catch (err) { /* ignore */ }
+
+      // === Continue with your app flow ===
+      // 1) If your calculator runs client-side without reload, call it here:
+      // calculateSpacing();  // <-- your existing function, if any
+
+      // 2) If you actually want to proceed with the browser's native submit:
+      // HTMLFormElement.prototype.submit.call(form);
+    });
+
+    // Optional: log reset clicks as a breadcrumb & a lightweight event
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        Sentry.addBreadcrumb({
+          category: 'ui.click',
+          type: 'user',
+          level: 'info',
+          message: 'Reset clicked'
+        });
+        Sentry.captureMessage('calcForm reset', 'info');
+      });
+    }
+  })();
 </script>
 
   </body>
